@@ -164,13 +164,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 91860872}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62cb2f116a70af74dbea1c85a5fdc74f, type: 3}
+  m_Script: {fileID: 11500000, guid: c12494044dbb2934fbbc5158e6d1b02a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _instances: 10000
-  _maxPosition: {x: 200, y: 200}
-  _objectMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  _objectMaterial: {fileID: 2100000, guid: d024a07f985c5544d92d73e68aa96b1d, type: 2}
+  _spawners:
+  - {fileID: 11400000, guid: 1ec4b23d6ebf9294b90a056c80f3d766, type: 2}
+  - {fileID: 11400000, guid: ba52b7ebb04ff8e4d8700e17fc4f3bb0, type: 2}
+  _GPUInstancedMaterial: {fileID: 2100000, guid: d024a07f985c5544d92d73e68aa96b1d, type: 2}
 --- !u!1 &407096965
 GameObject:
   m_ObjectHideFlags: 0

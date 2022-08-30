@@ -26,39 +26,47 @@ public class ObjectData
     }
 }
 
-public class Instanced_Spawning : MonoBehaviour
+public abstract class InstancedGroupSpawner : ScriptableObject
 {
-    [SerializeField] private int _instances;
-    [SerializeField] private Vector2 _maxPosition;
-    [SerializeField] private Mesh _objectMesh;
-    [SerializeField] private Material _objectMaterial;
+    public int instances;
+    public Vector2 maxPosition;
+    public Mesh objectMesh;
+    public Color objectColor;
 
-    private List<List<ObjectData>> batches = new List<List<ObjectData>>();
+    protected Material _objectMaterial;
+    protected List<List<ObjectData>> _batches = new List<List<ObjectData>>();
 
-    void Start()
+    public void InitializeSpawner(Material _baseMaterial)
+    {
+        _objectMaterial = new Material(_baseMaterial);
+        _objectMaterial.color = objectColor;
+
+        InitiliazeBatches();
+    }
+    public virtual void UpdateBatches()
+    {
+        RenderBatches();
+    }
+
+    private void InitiliazeBatches()
     {
         int batchIndexNumber = 0;
         List<ObjectData> currentBatch = new List<ObjectData>();
-        for (int i = 0; i < _instances; i++)
+        for (int i = 0; i < instances; i++)
         {
             AddObject(currentBatch, i);
             batchIndexNumber++;
             if (batchIndexNumber < 500) continue;
 
-            batches.Add(currentBatch);
+            _batches.Add(currentBatch);
             currentBatch = BuildNewBatch();
             batchIndexNumber = 0;
         }
     }
 
-    void Update()
-    {
-        RenderBatches();
-    }
-
     private void AddObject(List<ObjectData> currentBatch, int i)
     {
-        Vector2 position = new Vector2(UnityEngine.Random.Range(-_maxPosition.x, _maxPosition.x), UnityEngine.Random.Range(-_maxPosition.y, _maxPosition.y));
+        Vector2 position = new Vector2(UnityEngine.Random.Range(-maxPosition.x, maxPosition.x), UnityEngine.Random.Range(-maxPosition.y, maxPosition.y));
         currentBatch.Add(new ObjectData(position, new Vector2(2, 2), Quaternion.identity));
     }
 
@@ -69,9 +77,9 @@ public class Instanced_Spawning : MonoBehaviour
 
     private void RenderBatches()
     {
-        foreach(var batch in batches)
+        foreach(var batch in _batches)
         {
-            Graphics.DrawMeshInstanced(_objectMesh, 0, _objectMaterial, batch.Select((a) => a.matrix).ToList());
+            Graphics.DrawMeshInstanced(objectMesh, 0, _objectMaterial, batch.Select((a) => a.matrix).ToList());
         }
     }
 }

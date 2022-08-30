@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         if (Input.mouseScrollDelta.y == 0) return;
-        _mainCamera.orthographicSize = Mathf.Clamp(_mainCamera.orthographicSize + Input.mouseScrollDelta.y * _zoomSpeed, 0.1f, Mathf.Infinity);
+        _mainCamera.orthographicSize = Mathf.Clamp(_mainCamera.orthographicSize + -Input.mouseScrollDelta.y * _zoomSpeed, 0.1f, Mathf.Infinity);
     }
 
 }
