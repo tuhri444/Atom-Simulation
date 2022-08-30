@@ -55,7 +55,7 @@ public class SpawnerManager : MonoBehaviour
             for (int j = 0; j < _names.Count; j++)
             {
                 if (_combinationForceTable.ContainsKey((_names[i], _names[j]))) continue;
-                _combinationForceTable.Add((_names[i], _names[j]), Random.Range(-10f, 10f));
+                _combinationForceTable.Add((_names[i], _names[j]), Random.Range(-5f, 5f));
             }
         }
     }
@@ -89,8 +89,8 @@ public class SpawnerManager : MonoBehaviour
             a.velocity.y = (a.velocity.y + acceleration.y) * Time.deltaTime;
 
             Vector2 newPosition = new Vector2(a.position.x + a.velocity.x, a.position.y + a.velocity.y);
-            if (newPosition.x <= -_maxSizeArea || newPosition.x >= _maxSizeArea) newPosition *= -1;
-            if (newPosition.y <= -_maxSizeArea || newPosition.y >= _maxSizeArea) newPosition *= -1;
+            if (newPosition.x <= -_maxSizeArea || newPosition.x >= _maxSizeArea) a.velocity.x *= -1;
+            if (newPosition.y <= -_maxSizeArea || newPosition.y >= _maxSizeArea) a.velocity.y *= -1;
 
             newPositions.Add(newPosition);
         }
