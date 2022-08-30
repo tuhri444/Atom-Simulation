@@ -173,7 +173,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e2d2eb19294bc36459aee3423206303f, type: 2}
   - {fileID: 11400000, guid: 618c241f3eb088c46af596910a999559, type: 2}
   _GPUInstancedMaterial: {fileID: 2100000, guid: d024a07f985c5544d92d73e68aa96b1d, type: 2}
-  _maxSizeArea: 50
+  _maxSizeArea: 100
 --- !u!1 &407096965
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +294,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 50
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
