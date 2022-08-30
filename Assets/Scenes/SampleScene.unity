@@ -335,6 +335,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _zoomSpeed: 5
+  _zoomMagnitude: 0.5
+  _MouseTravelSpeed: 5
+  _MouseTravelMagnitude: 0.005
+  _preferredZPosition: -10
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
