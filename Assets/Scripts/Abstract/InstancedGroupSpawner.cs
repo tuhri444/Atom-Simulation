@@ -9,12 +9,15 @@ public class ObjectData
     public Vector2 position;
     public Vector2 scale;
     public Quaternion rotation;
+    public Vector2 velocity;
+    public string color;
 
-    public ObjectData(Vector2 pPosition, Vector2 pScale, Quaternion pRotation)
+    public ObjectData(Vector2 pPosition, Vector2 pScale, Quaternion pRotation, string pColor)
     {
         position = pPosition;
         scale = pScale;
         rotation = pRotation;
+        color = pColor;
     }
 
     public Matrix4x4 matrix
@@ -32,6 +35,7 @@ public abstract class InstancedGroupSpawner : ScriptableObject
     public Vector2 maxPosition;
     public Mesh objectMesh;
     public Color objectColor;
+    public string colorName;
 
     protected Material _objectMaterial;
     protected List<List<ObjectData>> _batches = new List<List<ObjectData>>();
@@ -48,6 +52,18 @@ public abstract class InstancedGroupSpawner : ScriptableObject
         RenderBatches();
     }
 
+    public List<ObjectData> GetObjects()
+    {
+        List<ObjectData> output = new List<ObjectData>();
+
+        foreach(List<ObjectData> list in _batches)
+        {
+            output.AddRange(list);
+        }
+
+        return output;
+    }
+
     private void InitiliazeBatches()
     {
         int batchIndexNumber = 0;
@@ -56,18 +72,19 @@ public abstract class InstancedGroupSpawner : ScriptableObject
         {
             AddObject(currentBatch, i);
             batchIndexNumber++;
-            if (batchIndexNumber < 500) continue;
-
-            _batches.Add(currentBatch);
-            currentBatch = BuildNewBatch();
-            batchIndexNumber = 0;
+            if (batchIndexNumber >= 500 || i == instances-1)
+            {
+                _batches.Add(currentBatch);
+                currentBatch = BuildNewBatch();
+                batchIndexNumber = 0;
+            }
         }
     }
 
     private void AddObject(List<ObjectData> currentBatch, int i)
     {
         Vector2 position = new Vector2(UnityEngine.Random.Range(-maxPosition.x, maxPosition.x), UnityEngine.Random.Range(-maxPosition.y, maxPosition.y));
-        currentBatch.Add(new ObjectData(position, new Vector2(2, 2), Quaternion.identity));
+        currentBatch.Add(new ObjectData(position, new Vector2(2, 2), Quaternion.identity, colorName));
     }
 
     private List<ObjectData> BuildNewBatch()
@@ -77,7 +94,7 @@ public abstract class InstancedGroupSpawner : ScriptableObject
 
     private void RenderBatches()
     {
-        foreach(var batch in _batches)
+        foreach(List<ObjectData> batch in _batches)
         {
             Graphics.DrawMeshInstanced(objectMesh, 0, _objectMaterial, batch.Select((a) => a.matrix).ToList());
         }
