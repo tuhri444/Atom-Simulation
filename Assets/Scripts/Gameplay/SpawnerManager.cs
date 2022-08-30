@@ -55,7 +55,7 @@ public class SpawnerManager : MonoBehaviour
             for (int j = 0; j < _names.Count; j++)
             {
                 if (_combinationForceTable.ContainsKey((_names[i], _names[j]))) continue;
-                _combinationForceTable.Add((_names[i], _names[j]), Random.Range(-5f, 5f));
+                _combinationForceTable.Add((_names[i], _names[j]), Random.Range(-10f, 10f));
             }
         }
     }
