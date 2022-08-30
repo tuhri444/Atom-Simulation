@@ -55,7 +55,7 @@ public class SpawnerManager : MonoBehaviour
             for (int j = 0; j < _names.Count; j++)
             {
                 if (_combinationForceTable.ContainsKey((_names[i], _names[j]))) continue;
-                _combinationForceTable.Add((_names[i], _names[j]), Random.Range(-5f, 5f));
+                _combinationForceTable.Add((_names[i], _names[j]), Random.Range(-10f, 10f));
             }
         }
     }
@@ -85,12 +85,12 @@ public class SpawnerManager : MonoBehaviour
                 }
             }
 
-            a.velocity.x = (a.velocity.x + acceleration.x) * 0.5f;
-            a.velocity.y = (a.velocity.y + acceleration.y) * 0.5f;
+            a.velocity.x = (a.velocity.x + acceleration.x) * Time.deltaTime;
+            a.velocity.y = (a.velocity.y + acceleration.y) * Time.deltaTime;
 
-            Vector2 newPosition = new Vector2(a.position.x + a.velocity.x * Time.deltaTime, a.position.y + a.velocity.y * Time.deltaTime);
-            if (newPosition.x <= -_maxSizeArea - 10 || newPosition.x >= _maxSizeArea + 10) newPosition *= -1;
-            if (newPosition.y <= -_maxSizeArea - 10 || newPosition.y >= _maxSizeArea + 10) newPosition *= -1;
+            Vector2 newPosition = new Vector2(a.position.x + a.velocity.x, a.position.y + a.velocity.y);
+            if (newPosition.x <= -_maxSizeArea || newPosition.x >= _maxSizeArea) newPosition *= -1;
+            if (newPosition.y <= -_maxSizeArea || newPosition.y >= _maxSizeArea) newPosition *= -1;
 
             newPositions.Add(newPosition);
         }
