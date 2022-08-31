@@ -10,14 +10,17 @@ public class ObjectData
     public Vector2 scale;
     public Quaternion rotation;
     public Vector2 velocity;
-    public string color;
+    public int id;
 
-    public ObjectData(Vector2 pPosition, Vector2 pScale, Quaternion pRotation, string pColor)
+    public float[] localComboTable;
+
+    public ObjectData(Vector2 pPosition, Vector2 pScale, Quaternion pRotation, int pID, int pCountAtomTypes)
     {
         position = pPosition;
         scale = pScale;
         rotation = pRotation;
-        color = pColor;
+        id = pID;
+        localComboTable = new float[pCountAtomTypes];
     }
 
     public Matrix4x4 matrix
@@ -35,15 +38,19 @@ public abstract class InstancedGroupSpawner : ScriptableObject
     public Vector2 maxPosition;
     public Mesh objectMesh;
     public Color objectColor;
-    public string colorName;
+    private int spawnerID;
 
+    private int countAtomTypes;
     protected Material _objectMaterial;
     protected List<List<ObjectData>> _batches = new List<List<ObjectData>>();
 
-    public void InitializeSpawner(Material _baseMaterial)
+    public void InitializeSpawner(Material pBaseMaterial, int pCountAtomTypes, int pSpawnerID)
     {
-        _objectMaterial = new Material(_baseMaterial);
+        _objectMaterial = new Material(pBaseMaterial);
         _objectMaterial.color = objectColor;
+
+        countAtomTypes = pCountAtomTypes;
+        spawnerID = pSpawnerID;
 
         InitiliazeBatches();
     }
@@ -84,7 +91,7 @@ public abstract class InstancedGroupSpawner : ScriptableObject
     private void AddObject(List<ObjectData> currentBatch, int i)
     {
         Vector2 position = new Vector2(UnityEngine.Random.Range(-maxPosition.x, maxPosition.x), UnityEngine.Random.Range(-maxPosition.y, maxPosition.y));
-        currentBatch.Add(new ObjectData(position, new Vector2(2, 2), Quaternion.identity, colorName));
+        currentBatch.Add(new ObjectData(position, new Vector2(2, 2), Quaternion.identity, spawnerID, countAtomTypes));
     }
 
     private List<ObjectData> BuildNewBatch()

@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 098dd2903ea9be944a0b0b5c5a990147, type: 3}
   m_Name: GreenSpawner
   m_EditorClassIdentifier: 
-  instances: 200
+  instances: 250
   maxPosition: {x: 100, y: 100}
   objectMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   objectColor: {r: 0.08926833, g: 1, b: 0, a: 0}
-  colorName: Green

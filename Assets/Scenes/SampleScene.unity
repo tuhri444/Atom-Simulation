@@ -876,7 +876,19 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 91860874}
         m_TargetAssemblyTypeName: SpawnerManager, Assembly-CSharp
-        m_MethodName: CreateCombinationTable
+        m_MethodName: CreateRandomComboTable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 91860874}
+        m_TargetAssemblyTypeName: SpawnerManager, Assembly-CSharp
+        m_MethodName: AdjustLocalComboTables
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
