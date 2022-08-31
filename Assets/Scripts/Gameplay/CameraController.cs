@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public bool canDrag = true;
+
     [SerializeField] private float _zoomSpeed = 5f;
     [SerializeField] private float _zoomMagnitude = 0.01f;
     [SerializeField] private float _MouseTravelSpeed = 5f;
@@ -16,6 +18,7 @@ public class CameraController : MonoBehaviour
     private Vector3 _newCameraPosition;
 
     private float _newZoomSize;
+    private bool _hasPressed;
 
     void Start()
     {
@@ -26,7 +29,10 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         Zoom();
-        DragMove();
+        if (canDrag)
+        {
+            DragMove();
+        }
     }
 
     private void Zoom()
@@ -45,8 +51,9 @@ public class CameraController : MonoBehaviour
             _mouseDownStartPosition = Input.mousePosition;
             _oldCameraPosition = _mainCamera.transform.position;
             _newCameraPosition = _mainCamera.transform.position;
+            _hasPressed = true;
         }
-        else if(Input.GetMouseButton(0))
+        else if (Input.GetMouseButton(0) && _hasPressed)
         {
             Vector2 mouseTravel = -(Input.mousePosition - _mouseDownStartPosition);
             float distanceMouseTravel = mouseTravel.magnitude;
@@ -54,7 +61,10 @@ public class CameraController : MonoBehaviour
             _newCameraPosition = _oldCameraPosition + (_MouseTravelMagnitude * distanceMouseTravel * directionMouseTravel * _mainCamera.orthographicSize);
             _newCameraPosition.z = _preferredZPosition;
         }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            _hasPressed = false;
+        }
         _mainCamera.transform.position = Vector3.Lerp(_mainCamera.transform.position, _newCameraPosition, _MouseTravelSpeed * Time.deltaTime);
     }
-
 }

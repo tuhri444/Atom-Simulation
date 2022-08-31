@@ -38,6 +38,8 @@ public abstract class InstancedGroupSpawner : ScriptableObject
     public Vector2 maxPosition;
     public Mesh objectMesh;
     public Color objectColor;
+    public string spawnerName;
+
     private int spawnerID;
 
     private int countAtomTypes;

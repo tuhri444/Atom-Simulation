@@ -8,13 +8,17 @@ public class SpawnerManager : MonoBehaviour
     [SerializeField] private Material _GPUInstancedMaterial;
     [SerializeField] private int _maxSizeArea;
 
+    public Vector2 _minMaxAttractionForce;
+
     private SortedList<(int, int), float> _combinationForceTable;
     private List<ObjectData> _particles;
+    private List<string> _names;
 
     void Start()
     {
         _combinationForceTable = new SortedList<(int, int), float>();
         _particles = new List<ObjectData>();
+        _names = new List<string>();
 
         InitializeSpawners();
 
@@ -49,6 +53,7 @@ public class SpawnerManager : MonoBehaviour
         {
             spawner.maxPosition = new Vector2(_maxSizeArea, _maxSizeArea);
             spawner.InitializeSpawner(_GPUInstancedMaterial, _spawners.Count, i);
+            _names.Add(spawner.spawnerName);
             i++;
         }
     }
@@ -64,7 +69,7 @@ public class SpawnerManager : MonoBehaviour
             for (int j = 0; j < _spawners.Count; j++)
             {
                 if (_combinationForceTable.ContainsKey((i, j))) continue;
-                _combinationForceTable.Add((i, j), Random.Range(-10f, 10f));
+                _combinationForceTable.Add((i, j), Random.Range(_minMaxAttractionForce.x, _minMaxAttractionForce.y));
             }
         }
     }
@@ -83,6 +88,42 @@ public class SpawnerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Allows you to change individual combo values in the global list and will then adjust the local combo tables.
+    /// </summary>
+    /// <param name="pKey">The combination you are looking to change.</param>
+    /// <param name="pValue">The value you want to assign to the combo.</param>
+    public void AdjustGlobalComboTable((int,int) pKey, float pValue)
+    {
+        _combinationForceTable[pKey] = pValue;
+        AdjustLocalComboTables();
+    }
+
+    /// <summary>
+    /// Gets the list containing all combinations of a certain type and their attraction force.
+    /// </summary>
+    /// <returns>SortedList with the key being the particle combo and the value being a float that holds the attraction force.</returns>
+    public SortedList<(int, int), float> GetGlobalComboTableOfType(int pType)
+    {
+        SortedList<(int, int), float> output = new SortedList<(int, int), float>();
+        foreach((int, int) key in _combinationForceTable.Keys)
+        {
+            if(key.Item1 == pType)
+            {
+                output.Add(key, _combinationForceTable[key]);
+            }
+        }
+        return output;
+    }
+
+    /// <summary>
+    /// Gets a list containing all the names of the different types of particles in the order of spawner IDs.
+    /// </summary>
+    /// <returns>List with all the names of each spawner.</returns>
+    public List<string> GetParticleNames()
+    {
+        return _names;
+    }
 
     /// <summary>
     /// Solves the physics calculations between all the particles.

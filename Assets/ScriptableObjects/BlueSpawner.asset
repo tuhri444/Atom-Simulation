@@ -16,3 +16,4 @@ MonoBehaviour:
   maxPosition: {x: 100, y: 100}
   objectMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   objectColor: {r: 0, g: 0.038576126, b: 1, a: 0}
+  spawnerName: Blue
