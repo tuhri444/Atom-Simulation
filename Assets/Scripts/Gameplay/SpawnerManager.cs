@@ -41,40 +41,6 @@ public class SpawnerManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Initialize each spawner with the prefab material that contains the right parameters.
-    /// Additionally they are passed their own ID and the amount of different elements there are. 
-    /// This is to let the particles create a local combo table array with the right size.
-    /// Lastly, the max spawning area is passed on to each spawner.
-    /// </summary>
-    private void InitializeSpawners()
-    {
-        int i = 0;
-        foreach (InstancedGroupSpawner spawner in _spawners)
-        {
-            spawner.maxPosition = new Vector2(_maxSizeArea, _maxSizeArea);
-            spawner.InitializeSpawner(_GPUInstancedMaterial, _spawners.Count, i);
-            _names.Add(spawner.spawnerName);
-            i++;
-        }
-    }
-
-    /// <summary>
-    /// Generates a random combo table, it will also automatically adjust the local tables.
-    /// </summary>
-    public void CreateRandomComboTable()
-    {
-        _combinationForceTable.Clear();
-        for (int i = 0; i < _spawners.Count; i++)
-        {
-            for (int j = 0; j < _spawners.Count; j++)
-            {
-                if (_combinationForceTable.ContainsKey((i, j))) continue;
-                _combinationForceTable.Add((i, j), Random.Range(_minMaxAttractionForce.x, _minMaxAttractionForce.y));
-            }
-        }
-    }
-
-    /// <summary>
     /// Changes the local element combo table saved in each particle based on the changes in the global combo table.
     /// </summary>
     public void AdjustLocalComboTables()
@@ -146,7 +112,7 @@ public class SpawnerManager : MonoBehaviour
                 float dy = a.position.y - b.position.y;
 
                 float d = Mathf.Sqrt(dx * dx + dy * dy);
-                if (d > 0 && d < 80)
+                if (d < 80)
                 {
                     float F = a.localComboTable[b.id] * 1.0f / d;
                     acceleration.x += (F * dx);
@@ -176,6 +142,40 @@ public class SpawnerManager : MonoBehaviour
         for (int i = 0; i < pForces.Count; i++)
         {
             _particles[i].position = pForces[i];
+        }
+    }
+
+    /// <summary>
+    /// Initialize each spawner with the prefab material that contains the right parameters.
+    /// Additionally they are passed their own ID and the amount of different elements there are. 
+    /// This is to let the particles create a local combo table array with the right size.
+    /// Lastly, the max spawning area is passed on to each spawner.
+    /// </summary>
+    private void InitializeSpawners()
+    {
+        int i = 0;
+        foreach (InstancedGroupSpawner spawner in _spawners)
+        {
+            spawner.maxPosition = new Vector2(_maxSizeArea, _maxSizeArea);
+            spawner.InitializeSpawner(_GPUInstancedMaterial, _spawners.Count, i);
+            _names.Add(spawner.spawnerName);
+            i++;
+        }
+    }
+
+    /// <summary>
+    /// Generates a random combo table, it will also automatically adjust the local tables.
+    /// </summary>
+    private void CreateRandomComboTable()
+    {
+        _combinationForceTable.Clear();
+        for (int i = 0; i < _spawners.Count; i++)
+        {
+            for (int j = 0; j < _spawners.Count; j++)
+            {
+                if (_combinationForceTable.ContainsKey((i, j))) continue;
+                _combinationForceTable.Add((i, j), Random.Range(_minMaxAttractionForce.x, _minMaxAttractionForce.y));
+            }
         }
     }
 }

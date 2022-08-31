@@ -37,7 +37,7 @@ public class ComboTableManager : MonoBehaviour
         _dropDownMenu.OnNextFrame();
     }
 
-    private void CreateComboSlider(Vector2 pMinMax, float pValue, (int,int) pName)
+    private void CreateComboSlider(Vector2 pMinMax, float pValue, (int, int) pName)
     {
         ComboSlider newSlider = Instantiate(_comboPanelTemplate, transform).GetComponent<ComboSlider>();
         newSlider.SetMinMaxValue(pMinMax);
@@ -65,8 +65,35 @@ public class ComboTableManager : MonoBehaviour
         }
     }
 
-    private void OnSliderValueChange((int,int) pName, float pValue)
+    private void OnSliderValueChange((int, int) pName, float pValue)
     {
         _spawnerManager.AdjustGlobalComboTable(pName, pValue);
+    }
+
+
+    /// <summary>
+    /// Generates a random combo table, it will also automatically adjust the local tables.
+    /// </summary>
+    public void CreateRandomComboTable()
+    {
+        for (int i = 0; i < _names.Count; i++)
+        {
+            SortedList<(int, int), float> particleCombos = _spawnerManager.GetGlobalComboTableOfType(i);
+
+            for (int j = 0; j < particleCombos.Count; j++)
+            {
+                _spawnerManager.AdjustGlobalComboTable((i, j), Random.Range(_spawnerManager._minMaxAttractionForce.x, _spawnerManager._minMaxAttractionForce.y));
+            }
+
+            if (_dropDownMenu.GetCurrentValue() == i)
+            {
+                particleCombos = _spawnerManager.GetGlobalComboTableOfType(i);
+                for (int j = 0; j < _comboSliders.Count; j++)
+                {
+                    _comboSliders[j].ChangeValueField(particleCombos[(i, j)]);
+                    _comboSliders[j].SetValue(particleCombos[(i, j)]);
+                }
+            }
+        }
     }
 }
